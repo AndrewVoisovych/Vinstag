@@ -1,4 +1,3 @@
-using Vinstag.API.Data;
 using Vinstag.Common.Models.Enums;
 using Vinstag.Common.Models.Storage;
 using Vinstag.DataAccess.CsvProcessor;
@@ -25,14 +24,9 @@ public class ConnectionService
 
     public async Task<InstaUsers?> GetFollowing(string id, bool onlyFirst = true, bool saveData = false)
     {
-        _instaApi.SetSession(new SessionData
-        {
-            UserId = id,
-            Cookies = Input.Cookies
-        });
-
         var endpointConfig = new EndpointsConfig
         {
+            Id = id,
             Endpoint = Endpoints.Following,
             EndpointHash = Endpoints.FollowingQueryHash
         };
@@ -53,14 +47,9 @@ public class ConnectionService
 
     public async Task<InstaUsers?> GetFollowers(string id, bool onlyFirst = true, bool saveData = false)
     {
-        _instaApi.SetSession(new SessionData
-        {
-            UserId = id,
-            Cookies = Input.Cookies
-        });
-
         var endpointConfig = new EndpointsConfig
         {
+            Id = id,
             Endpoint = Endpoints.Following,
             EndpointHash = Endpoints.FollowersQueryHash
         };

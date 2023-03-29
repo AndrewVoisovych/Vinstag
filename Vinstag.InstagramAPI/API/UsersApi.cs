@@ -5,6 +5,7 @@ using Vinstag.Common.DependencyInjection;
 using Vinstag.InstagramAPI.Data;
 using Vinstag.InstagramAPI.Exception;
 using Vinstag.InstagramAPI.HttpTransaction;
+using Vinstag.InstagramAPI.Models;
 using Vinstag.InstagramAPI.Models.UserByUsername;
 using static System.String;
 
@@ -13,10 +14,13 @@ namespace Vinstag.InstagramAPI.API;
 public class UsersApi
 {
     private readonly HttpClient httpClient;
+    private readonly SessionData session;
 
-    public UsersApi(HttpClient httpClient)
+
+    public UsersApi(HttpClient httpClient, SessionData session)
     {
         this.httpClient = httpClient;
+        this.session = session;
     }
 
     public async Task<User> GetUserByUserName(string username, string endpoint)
@@ -33,7 +37,7 @@ public class UsersApi
             Headers =
             {
 
-                { HeaderNames.Cookie,  "******" },
+                { HeaderNames.Cookie,  session.Cookies },
             }
         };
 

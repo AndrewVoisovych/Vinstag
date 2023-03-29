@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<ConnectionService>();
+        services.AddSingleton<AuthenticationService>();
         services.AddSingleton<UserService>();
         services.AddSingleton<EnumHelper>();
 

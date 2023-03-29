@@ -16,7 +16,7 @@ public class UserService
     {
         if (string.IsNullOrEmpty(username))
         {
-            username = "andr_vois";
+            username = "custom";
         }
 
         var user = await _instaApi.Users.GetUserByUserName(username, Endpoints.SearchFromUsername);

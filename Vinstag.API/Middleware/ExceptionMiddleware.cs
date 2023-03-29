@@ -24,6 +24,11 @@ public class ExceptionMiddleware
             _logger.LogError($"A new NoUsersException has been thrown: {avEx}");
             await HandleExceptionAsync(httpContext, avEx);
         }
+        catch (NoSessionException avEx)
+        {
+            _logger.LogError($"A new NoSessionException has been thrown: {avEx}");
+            await HandleExceptionAsync(httpContext, avEx);
+        }
         catch (Exception ex)
         {
             _logger.LogError($"Something went wrong: {ex}");
@@ -38,6 +43,7 @@ public class ExceptionMiddleware
         var message = exception switch
         {
             NoUsersException => "No Users",
+            NoSessionException => "No session data",
             _ => "Internal Server Error from the custom middleware."
         };
 

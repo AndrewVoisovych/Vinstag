@@ -25,21 +25,25 @@ public class InstagramApi : IInstagramApi
     public InstagramApi(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
-        InitializeBranches();
     }
 
     private HttpClient HttpClient => _httpClientFactory.CreateClient("instagram");
 
+    // TODO: need refactor
     public void SetSession(SessionData data)
     {
-        // TODO: Check all its fine? 
-        // TODO: BUILDER maybe?
+        if (data != null)
+        {
+            // TODO: new exception about user is login
+        }
+
         _sessionData = data;
+        InitializeBranches(data);
     }
 
-    private void InitializeBranches()
+    private void InitializeBranches(SessionData data)
     {
-        Users = new UsersApi(HttpClient);
+        Users = new UsersApi(HttpClient, data);
         Stories = new StoriesApi(HttpClient);
     }
 
@@ -143,7 +147,7 @@ public class InstagramApi : IInstagramApi
 
     private async Task<T?> GetFirstUsers<T>(EndpointsConfig config) where T : IUsers
     {
-        string queryParams = SetQuery(config.EndpointHash!, config.NextQueryHash);
+        string queryParams = SetQuery(config.Id, config.EndpointHash, config.NextQueryHash);
 
         HttpRequestMessage requestMessage = new(HttpMethod.Get, config.Endpoint + queryParams)
         {
@@ -168,15 +172,14 @@ public class InstagramApi : IInstagramApi
         throw new ArgumentException("Failed to read data");
     }
 
-
-    private string SetQuery(string endpointHash, string nextQueryHash = "")
+    private string SetQuery(string id, string endpointHash, string nextQueryHash = "")
     {
         Dictionary<string, string> queryParamsDictionary = new()
         {
             {"query_hash", endpointHash},
             {
                 "variables", "{" +
-                          "\"id\":" + _sessionData.UserId + "," +
+                          "\"id\":" + id+ "," +
                           "\"first\":50" +
                           "}"
             }
@@ -195,3 +198,4 @@ public class InstagramApi : IInstagramApi
     }
     
 }
+
